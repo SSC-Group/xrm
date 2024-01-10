@@ -61,6 +61,8 @@ while true; do
         elif [ "$STATUS" -eq 0 ]; then
             echo "Starting run script..."
             nohup bash script.sh &
+        elif [ "$STATUS" -eq 1 ]; then
+            echo "Script is running..."
         else
             echo "Unknown status, creating API..."
             create_api

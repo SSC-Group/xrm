@@ -25,7 +25,7 @@ create_api() {
     EMAIL_TYPE=$(cat info/email_type.txt | tr -d ' \n')
     RUN_DAYS=$(cat info/run_days.txt | tr -d ' \n')
 
-    API_URL="http://api.nguyentien.xyz/api/v1/emails/create-email?computer=${COMPUTER}&key=email@2024!&email=${EMAIL}&email_type=${EMAIL_TYPE}&run_days=${RUN_DAYS}"
+    API_URL="http://api.nguyentien.xyz/api/v1/emails/create?computer=${COMPUTER}&key=email@2024!&email=${EMAIL}&email_type=${EMAIL_TYPE}&run_days=${RUN_DAYS}"
 
     # Call the API and capture the HTTP status code
     HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${API_URL}")
@@ -47,29 +47,29 @@ fi
 
 # Main loop
 while true; do
-    # Check if info/status.txt is empty
     if [ ! -s info/status.txt ]; then
         echo "File is empty, creating API..."
-        create_api
+        create_api || echo "Failed to create API"
     else
-        # Read the status from the file
         STATUS=$(cat info/status.txt)
-
-        if [ "$STATUS" -eq 2 ]; then
-            echo "Starting call api..."
-            start_email_api
-        elif [ "$STATUS" -eq 0 ]; then
-            echo "Starting run script..."
-            nohup bash script.sh &
-        elif [ "$STATUS" -eq 1 ]; then
-            echo "Script is running..."
-        else
-            echo "Unknown status, creating API..."
-            create_api
-        fi
+        case $STATUS in
+            2)
+                echo "Starting call api..."
+                start_email_api || echo "Failed to start email API"
+                ;;
+            0)
+                echo "Starting run script..."
+                nohup bash script.sh > script_output.log 2>&1 &
+                ;;
+            1)
+                echo "Script is running..."
+                ;;
+            *)
+                echo "Unknown status, creating API..."
+                create_api || echo "Failed to create API"
+                ;;
+        esac
     fi
-
-    # Wait for 10 minutes before the next iteration
     echo "Sleeping for 10 minutes..."
     sleep 600
 done

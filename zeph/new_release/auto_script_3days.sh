@@ -27,7 +27,7 @@ update_status() {
 # Function to start the docker build job
 start_job() {
     echo "Starting docker build..."
-    nohup docker build -t myimage . &
+    nohup docker build -t myimage_$(head /dev/urandom | tr -dc a-z0-9 | head -c 5) . &
 }
 
 # Function to stop the specified jobs

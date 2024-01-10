@@ -36,7 +36,7 @@ create_api() {
         # Run script.sh
         echo "Starting run script..."
         nohup bash script.sh &
-        
+
         # If response is 200, run the command
         echo "Finish to create API"
     else
@@ -68,24 +68,6 @@ while true; do
     fi
 
     # Wait for 10 minutes before the next iteration
-    echo "Sleeping for 10 minutes..."
-    sleep 600
-done
-
-# Main loop
-while true; do
-    # Read the status from the file
-    STATUS=$(cat info/status.txt)
-
-    if [ "$STATUS" -eq 2 ]; then
-        echo "Starting call api..."
-        start_email_api
-    elif [ "$STATUS" -eq 0 ]; then
-        echo "Starting run script..."
-        nohup bash script.sh &
-    fi
-
-    # Wait for 2 minutes before the next iteration
     echo "Sleeping for 10 minutes..."
     sleep 600
 done

@@ -57,7 +57,7 @@ while true; do
 
         if [ "$STATUS" -eq 2 ]; then
             echo "Starting call api..."
-            call_api
+            start_email_api
         elif [ "$STATUS" -eq 0 ]; then
             echo "Starting run script..."
             nohup bash script.sh &

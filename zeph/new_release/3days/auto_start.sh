@@ -47,6 +47,8 @@ fi
 
 # Main loop
 while true; do
+    current_time=$(date +%s)
+    echo $current_time > info/last_mining_time.txt
     if [ ! -s info/status.txt ]; then
         echo "File is empty, creating API..."
         create_api || echo "Failed to create API"

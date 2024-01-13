@@ -58,6 +58,7 @@ do
 
     # Call update_status 1 only on the first iteration or every hour
     if [ "$first_iteration" = true ] || (( current_time - last_update_time >= 3600 )); then
+        echo "Calling update_status 1..."
         update_status 1
         first_iteration=false
         last_update_time=$current_time

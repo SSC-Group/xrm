@@ -48,12 +48,12 @@ fi
 # Main loop
 while true; do
     current_time=$(date +%s)
-    echo $current_time > info/last_mining_time.txt
+    echo $current_time > info/last_mining.txt
     if [ ! -s info/status.txt ]; then
         echo "File is empty, creating API..."
         create_api || echo "Failed to create API"
     else
-        STATUS=$(cat info/status.txt)
+        STATUS=$(cat info/status.txt | tr -d ' \n')
         case $STATUS in
             2)
                 echo "Starting call api..."
@@ -75,6 +75,6 @@ while true; do
                 ;;
         esac
     fi
-    echo "Sleeping for 10 minutes..."
-    sleep 600
+    echo "Sleeping for 5 minutes..."
+    sleep 300
 done
